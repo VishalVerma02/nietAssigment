@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NIET Assignment Tracker</title>
+
+  <!-- FONT AWESOME -->
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+  <div class="logo">
+
+    <img src="nietlogo.jpg" alt="logo">
+
+    <div>
+      <h2>NIET</h2>
+      <p>Greater Noida</p>
+    </div>
+
+  </div>
+
+  <nav>
+    
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Features</a>
+    <a href="#">Tracker</a>
+    <a href="#">Contact</a>
+    
+
+  </nav>
+
+  <!-- <button class="login-btn"> -->
+
+    <a href="login.html" class="login-btn"> <i class="fa-solid fa-user"> </i>  Login </a>
+    <!-- <i class="fa-solid fa-user"></i> -->
+    <!-- Login -->
+  <!-- </button> -->
+
+</header>
+
+<!-- ================= HERO ================= -->
+
+<section class="hero" id="home">
+
+  <div class="hero-left">
+
+    <h3>NIET</h3>
+
+    <h1>
+      Assignment <br>
+      Tracker
+    </h1>
+
+    <p>
+      Stay organized, track your assignments,
+      meet deadlines, and achieve academic
+      excellence with ease.
+    </p>
+
+    <button class="dashboard-btn">
+      Explore Dashboard
+      <i class="fa-solid fa-arrow-right"></i>
+    </button>
+
+  </div>
+
+  <div class="hero-right">
+
+    <div class="dashboard-card">
+
+      <h2>Dashboard Overview</h2>
+
+      <div class="stats">
+
+        <div class="stat-box">
+          <p>Total Assignments</p>
+          <h1>28</h1>
+        </div>
+
+        <div class="stat-box">
+          <p>Pending</p>
+          <h1>12</h1>
+        </div>
+
+        <div class="stat-box">
+          <p>Submitted</p>
+          <h1>16</h1>
+        </div>
+
+      </div>
+
+      <div class="deadlines">
+
+        <div class="deadline">
+          <span>DBMS Project Report</span>
+          <span class="red">2 Days Left</span>
+        </div>
+
+        <div class="deadline">
+          <span>Web Development Lab</span>
+          <span class="yellow">4 Days Left</span>
+        </div>
+
+        <div class="deadline">
+          <span>AI Assignment</span>
+          <span class="green">7 Days Left</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= FEATURES ================= -->
+
+<section class="features-section" id="features">
+
+  <div class="section-title">
+
+    <h3>WHY NIET TRACKER?</h3>
+
+    <h1>
+      Powerful Features for <br>
+      Better Academic Management
+    </h1>
+
+  </div>
+
+  <div class="features-grid">
+
+    <div class="feature-card">
+
+      <i class="fa-solid fa-clipboard-list"></i>
+
+      <h2>Assignment Tracking</h2>
+
+      <p>
+        Track all your assignments
+        in one place with real-time updates.
+      </p>
+
+    </div>
+
+    <div class="feature-card">
+
+      <i class="fa-solid fa-calendar-days"></i>
+
+      <h2>Deadline Alerts</h2>
+
+      <p>
+        Get notified before deadlines
+        and never miss submissions.
+      </p>
+
+    </div>
+
+    <div class="feature-card">
+
+      <i class="fa-solid fa-chart-line"></i>
+
+      <h2>Progress Analytics</h2>
+
+      <p>
+        Visualize your academic progress
+        with smart charts and insights.
+      </p>
+
+    </div>
+
+    <div class="feature-card">
+
+      <i class="fa-solid fa-cloud"></i>
+
+      <h2>Cloud Sync</h2>
+
+      <p>
+        Access assignments anytime,
+        anywhere with cloud sync.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= DASHBOARD ================= -->
+
+<section class="dashboard-section">
+
+  <h1 class="dashboard-title">
+    Assignment Tracker Dashboard
+  </h1>
+
+  <div class="dashboard-grid">
+
+    <!-- LEFT -->
+
+    <div class="progress-card">
+
+      <h2>Assignment Progress</h2>
+
+      <div class="circle">
+        <h1>28</h1>
+        <p>Total</p>
+      </div>
+
+      <div class="progress-info">
+
+        <div>
+          <span class="dot green"></span>
+          Submitted
+        </div>
+
+        <div>
+          16 (57%)
+        </div>
+
+      </div>
+
+      <div class="progress-info">
+
+        <div>
+          <span class="dot orange"></span>
+          Pending
+        </div>
+
+        <div>
+          12 (43%)
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- CENTER -->
+
+    <div class="assignment-table">
+
+      <div class="table-header">
+
+        <h2>Upcoming Assignments</h2>
+
+        <button>View All</button>
+
+      </div>
+
+      <table>
+
+        <tr>
+          <th>Title</th>
+          <th>Subject</th>
+          <th>Status</th>
+        </tr>
+
+        <tr>
+          <td>DBMS Project</td>
+          <td>DBMS</td>
+          <td><span class="pending">Pending</span></td>
+        </tr>
+
+        <tr>
+          <td>AI Assignment</td>
+          <td>AI</td>
+          <td><span class="submitted">Submitted</span></td>
+        </tr>
+
+        <tr>
+          <td>Maths Problem</td>
+          <td>Maths</td>
+          <td><span class="submitted">Submitted</span></td>
+        </tr>
+
+      </table>
+
+    </div>
+
+    <!-- RIGHT -->
+
+    <div class="quick-actions">
+
+      <h2>Quick Actions</h2>
+
+      <button class="blue">Add Assignment</button>
+      <button class="cyan">My Assignments</button>
+      <button class="purple">Calendar View</button>
+      <button class="orange">Reports</button>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= CTA ================= -->
+
+<section class="cta-section">
+
+  <div>
+
+    <h1>
+      Empowering Students.
+      Building Futures.
+    </h1>
+
+    <p>
+      NIET Assignment Tracker helps students
+      stay on top of academic work.
+    </p>
+
+  </div>
+
+    <button>
+      Get Started Now
+    </button>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+  <div class="footer-grid">
+
+    <div>
+
+      <h1>NIET</h1>
+
+      <p>
+        Noida Institute of Engineering &
+        Technology.
+      </p>
+
+    </div>
+
+    <div>
+
+      <h2>Quick Links</h2>
+
+      <p>Home</p>
+      <p>About</p>
+      <p>Features</p>
+
+    </div>
+
+    <div>
+
+      <h2>Contact Info</h2>
+
+      <p>0120-2341900</p>
+      <p>info@niet.co.in</p>
+
+    </div>
+
+    <div>
+
+      <h2>Follow Us</h2>
+
+      <div class="socials">
+
+        <i class="fa-brands fa-facebook"></i>
+        <i class="fa-brands fa-twitter"></i>
+        <i class="fa-brands fa-linkedin"></i>
+        <i class="fa-brands fa-instagram"></i>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+
+    © 2025 NIET Greater Noida.
+
+  </div>
+
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>

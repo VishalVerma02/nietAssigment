@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - NIET Assignment Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #003366 0%, #004d99 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 250px;
+      height: 100vh;
+      background: linear-gradient(180deg, #002244 0%, #003366 100%);
+      padding: 30px 0;
+      overflow-y: auto;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #00d4ff;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 15px 20px;
+      color: white;
+      text-decoration: none;
+      transition: 0.3s;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: rgba(0, 212, 255, 0.1);
+      border-left-color: #00d4ff;
+      color: #00d4ff;
+    }
+
+    .logout-btn {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      padding: 10px;
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .main-content {
+      margin-left: 250px;
+      padding: 30px;
+    }
+
+    .header {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      color: #003366;
+      font-size: 28px;
+    }
+
+    .user-info {
+      text-align: right;
+      color: #666;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section h2 {
+      color: white;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .tab-btn.active {
+      background: #00d4ff;
+      color: #003366;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .assignments-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .assignment-card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+      border-left: 5px solid #00d4ff;
+    }
+
+    .assignment-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .assignment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 15px;
+    }
+
+    .assignment-card h3 {
+      color: #003366;
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      background: #e3f2fd;
+      color: #1976d2;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .status-badge.pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-badge.submitted {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .assignment-card p {
+      color: #666;
+      font-size: 13px;
+      margin: 10px 0;
+      line-height: 1.5;
+    }
+
+    .assignment-meta {
+      display: flex;
+      justify-content: space-between;
+      color: #999;
+      font-size: 12px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+
+    .subject-tag {
+      display: inline-block;
+      padding: 3px 8px;
+      background: #f0f0f0;
+      color: #666;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .submit-btn {
+      background: #00d4ff;
+      color: #003366;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 12px;
+      transition: 0.3s;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .submit-btn:hover {
+      background: #0099cc;
+      color: white;
+    }
+
+    .notification-card {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid #00d4ff;
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+    }
+
+    .notification-card.unread {
+      background: #f0f9ff;
+    }
+
+    .notification-content h4 {
+      color: #003366;
+      margin-bottom: 5px;
+    }
+
+    .notification-content p {
+      color: #666;
+      font-size: 13px;
+    }
+
+    .notification-time {
+      color: #999;
+      font-size: 12px;
+      text-align: right;
+    }
+
+    .mark-read-btn {
+      background: none;
+      border: none;
+      color: #00d4ff;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 5px 10px;
+    }
+
+    .no-data {
+      background: white;
+      padding: 30px;
+      text-align: center;
+      border-radius: 10px;
+      color: #999;
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      .main-content {
+        margin-left: 200px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: absolute;
+        width: 180px;
+        z-index: 100;
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 20px;
+      }
+
+      .assignments-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">
+      <i class="fas fa-cube"></i> NIET
+    </div>
+    <a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="#assignments"><i class="fas fa-tasks"></i> Assignments</a>
+    <a href="#notifications"><i class="fas fa-bell"></i> Notifications</a>
+    <a href="#"><i class="fas fa-cog"></i> Settings</a>
+    <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </div>
+
+  <div class="main-content">
+    <div class="header">
+      <h1>📚 My Assignments</h1>
+      <div class="user-info">
+        <p id="userName">Welcome Student</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="assignments">📝 My Assignments</button>
+        <button class="tab-btn" data-tab="notifications">🔔 Notifications</button>
+      </div>
+
+      <!-- Assignments Tab -->
+      <div id="assignments" class="tab-content active">
+        <div id="assignmentsContainer" class="assignments-container">
+          <p style="color: white; text-align: center; grid-column: 1/-1;">Loading assignments...</p>
+        </div>
+      </div>
+
+      <!-- Notifications Tab -->
+      <div id="notifications" class="tab-content">
+        <div id="notificationsContainer">
+          <p style="color: white; text-align: center;">Loading notifications...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // API URL configuration (automatically toggles between local server and deployed URL)
+    const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.startsWith('192.168.')
+      ? `http://${window.location.hostname}:5000/api`
+      : 'https://niet-assignment-tracker-backend.onrender.com/api'; // Replace with your actual Render backend URL
+
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById(this.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Load user info
+    function loadUserInfo() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user || user.role !== 'student') {
+        window.location.href = 'login.html';
+        return;
+      }
+      document.getElementById('userName').textContent = `Welcome, ${user.fullName}`;
+    }
+
+    // Load assignments
+    async function loadAssignments() {
+      const token = localStorage.getItem('token');
+      try {
+        const response = await fetch(`${API_URL}/student/assignments`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const assignments = await response.json();
+
+        const container = document.getElementById('assignmentsContainer');
+        if (assignments.length === 0) {
+          container.innerHTML = '<div class="no-data"><p>No assignments yet</p></div>';
+          return;
+        }
+
+        container.innerHTML = assignments.map(a => {
+          const dueDate = new Date(a.dueDate);
+          const now = new Date();
+          const isOverdue = dueDate < now && a.status === 'pending';
+
+          return `
+            <div class="assignment-card">
+              <div class="assignment-header">
+                <h3>${a.title}</h3>
+                <span class="status-badge ${a.status}">${a.status.toUpperCase()}</span>
+              </div>
+              <p><span class="subject-tag">${a.subject}</span></p>
+              <p>${a.description || 'No description provided'}</p>
+              <div class="assignment-meta">
+                <span><i class="fas fa-calendar"></i> ${dueDate.toLocaleDateString()}</span>
+                <span><i class="fas fa-clock"></i> ${dueDate.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</span>
+                ${isOverdue ? '<span style="color: #ff6b6b;"><i class="fas fa-exclamation-circle"></i> Overdue</span>' : ''}
+              </div>
+              ${a.status === 'pending' ? `
+                <button class="submit-btn" onclick="submitAssignment(${a.id}, '${a.title}')">
+                  <i class="fas fa-upload"></i> Submit Assignment
+                </button>
+              ` : ''}
+            </div>
+          `;
+        }).join('');
+      } catch (error) {
+        console.error('Error loading assignments:', error);
+      }
+    }
+
+    // Load notifications
+    async function loadNotifications() {
+      const token = localStorage.getItem('token');
+      try {
+        const response = await fetch(`${API_URL}/student/notifications`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const notifications = await response.json();
+
+        const container = document.getElementById('notificationsContainer');
+        if (notifications.length === 0) {
+          container.innerHTML = '<div class="no-data"><p>No notifications</p></div>';
+          return;
+        }
+
+        container.innerHTML = notifications.map(n => {
+          const date = new Date(n.createdAt);
+          return `
+            <div class="notification-card ${!n.isRead ? 'unread' : ''}">
+              <div class="notification-content">
+                <h4>${n.title}</h4>
+                <p>${n.message}</p>
+              </div>
+              ${!n.isRead ? `
+                <button class="mark-read-btn" onclick="markAsRead(${n.id})">Mark Read</button>
+              ` : ''}
+              <div class="notification-time">${date.toLocaleDateString()}</div>
+            </div>
+          `;
+        }).join('');
+      } catch (error) {
+        console.error('Error loading notifications:', error);
+      }
+    }
+
+    // Submit assignment
+    function submitAssignment(assignmentId, title) {
+      const file = prompt(`Enter submission file name for "${title}":\n(e.g., solution.pdf, code.zip)`);
+      if (!file) return;
+
+      const token = localStorage.getItem('token');
+      fetch(`${API_URL}/student/submit-assignment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ assignmentId, submissionFile: file })
+      }).then(res => res.json()).then(data => {
+        alert(data.message || 'Assignment submitted successfully!');
+        loadAssignments();
+      }).catch(err => alert('Error submitting assignment'));
+    }
+
+    // Mark notification as read
+    function markAsRead(notificationId) {
+      const token = localStorage.getItem('token');
+      fetch(`${API_URL}/student/notifications/${notificationId}/read`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` }
+      }).then(() => loadNotifications());
+    }
+
+    // Logout
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = 'login.html';
+    }
+
+    // Initialize
+    loadUserInfo();
+    loadAssignments();
+    loadNotifications();
+  </script>
+</body>
+</html>

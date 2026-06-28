@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Management - NIET Assignment Tracker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      background: white;
+      color: #667eea;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #eee;
+    }
+
+    .tab-btn {
+      padding: 12px 20px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      color: #999;
+      transition: all 0.3s;
+    }
+
+    .tab-btn.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .admin-card {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+      transition: all 0.3s;
+    }
+
+    .admin-card:hover {
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      transform: translateY(-5px);
+    }
+
+    .admin-card h3 {
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .admin-card p {
+      margin: 8px 0;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .admin-card strong {
+      color: #333;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn-small {
+      padding: 8px 12px;
+      font-size: 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+      flex: 1;
+    }
+
+    .btn-edit {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-delete {
+      background: #ff6b6b;
+      color: white;
+    }
+
+    .btn-small:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    .alert {
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .alert.show {
+      display: block;
+    }
+
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 5px;
+    }
+
+    .badge-active {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .badge-inactive {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .logout-btn {
+      background: #ff6b6b;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #ddd;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-users-cog"></i> Admin Management</h1>
+      <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+
+    <div class="content">
+      <div id="alert" class="alert"></div>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('view')">
+          <i class="fas fa-list"></i> View Admins
+        </button>
+        <button class="tab-btn" onclick="switchTab('add')">
+          <i class="fas fa-user-plus"></i> Add New Admin
+        </button>
+      </div>
+
+      <!-- View Admins Tab -->
+      <div id="view" class="tab-content active">
+        <div id="adminsList" class="admin-grid"></div>
+      </div>
+
+      <!-- Add Admin Tab -->
+      <div id="add" class="tab-content">
+        <form onsubmit="addAdmin(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fullName">Full Name *</label>
+              <input type="text" id="fullName" required placeholder="Enter admin name">
+            </div>
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" required placeholder="Enter email">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="password">Password *</label>
+              <input type="password" id="password" required placeholder="Enter password">
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" placeholder="Enter phone number">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="department">Department</label>
+              <input type="text" id="department" placeholder="e.g., Computer Science">
+            </div>
+            <div class="form-group">
+              <label for="designation">Designation</label>
+              <input type="text" id="designation" placeholder="e.g., Assistant Professor">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="qualifications">Qualifications</label>
+              <input type="text" id="qualifications" placeholder="e.g., B.Tech, M.Tech, Ph.D">
+            </div>
+            <div class="form-group">
+              <label for="experience">Years of Experience</label>
+              <input type="number" id="experience" min="0" placeholder="e.g., 10">
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-user-plus"></i> Add Admin
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // API URL configuration (automatically toggles between local server and deployed URL)
+    const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.startsWith('192.168.')
+      ? `http://${window.location.hostname}:5000/api`
+      : 'https://niet-assignment-tracker-backend.onrender.com/api'; // Replace with your actual Render backend URL
+
+    // Check if user is logged in
+    window.addEventListener('load', () => {
+      const token = localStorage.getItem('token');
+      const role = localStorage.getItem('role');
+      
+      if (!token || role !== 'admin') {
+        window.location.href = '/login.html';
+      }
+
+      loadAdmins();
+    });
+
+    // Switch Tabs
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(tab).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    // Load All Admins
+    async function loadAdmins() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/admin/list`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) throw new Error('Failed to load admins');
+
+        const admins = await response.json();
+        displayAdmins(admins);
+      } catch (error) {
+        showAlert('Error loading admins: ' + error.message, 'error');
+      }
+    }
+
+    // Display Admins
+    function displayAdmins(admins) {
+      const listDiv = document.getElementById('adminsList');
+      
+      if (admins.length === 0) {
+        listDiv.innerHTML = `
+          <div class="empty-state" style="grid-column: 1/-1;">
+            <i class="fas fa-users-slash"></i>
+            <p>No admins found</p>
+          </div>
+        `;
+        return;
+      }
+
+      listDiv.innerHTML = admins.map(admin => `
+        <div class="admin-card">
+          <h3>${admin.fullName}</h3>
+          <p><strong>Email:</strong> ${admin.email}</p>
+          <p><strong>Department:</strong> ${admin.department || 'N/A'}</p>
+          <p><strong>Designation:</strong> ${admin.designation || 'N/A'}</p>
+          <p><strong>Phone:</strong> ${admin.phone || 'N/A'}</p>
+          <p><strong>Experience:</strong> ${admin.experience} years</p>
+          <p><strong>Qualifications:</strong> ${admin.qualifications || 'N/A'}</p>
+          <span class="badge ${admin.isActive ? 'badge-active' : 'badge-inactive'}">
+            ${admin.isActive ? '✓ Active' : '✗ Inactive'}
+          </span>
+          ${admin.isActive ? `
+            <div class="admin-actions">
+              <button class="btn-small btn-delete" onclick="deactivateAdmin(${admin.id})">
+                <i class="fas fa-ban"></i> Deactivate
+              </button>
+            </div>
+          ` : ''}
+        </div>
+      `).join('');
+    }
+
+    // Add New Admin
+    async function addAdmin(e) {
+      e.preventDefault();
+
+      const data = {
+        fullName: document.getElementById('fullName').value,
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value,
+        department: document.getElementById('department').value,
+        designation: document.getElementById('designation').value,
+        phone: document.getElementById('phone').value,
+        qualifications: document.getElementById('qualifications').value,
+        experience: document.getElementById('experience').value
+      };
+
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/admin/create`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) throw new Error(result.message);
+
+        showAlert('✅ Admin added successfully!', 'success');
+        
+        // Reset form
+        e.target.reset();
+        
+        // Reload admins
+        setTimeout(() => loadAdmins(), 1000);
+      } catch (error) {
+        showAlert('❌ ' + error.message, 'error');
+      }
+    }
+
+    // Deactivate Admin
+    async function deactivateAdmin(id) {
+      if (!confirm('Are you sure you want to deactivate this admin?')) return;
+
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/admin/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) throw new Error('Failed to deactivate admin');
+
+        showAlert('✅ Admin deactivated successfully!', 'success');
+        setTimeout(() => loadAdmins(), 1000);
+      } catch (error) {
+        showAlert('❌ ' + error.message, 'error');
+      }
+    }
+
+    // Show Alert
+    function showAlert(message, type) {
+      const alert = document.getElementById('alert');
+      alert.textContent = message;
+      alert.className = `alert show alert-${type}`;
+      
+      setTimeout(() => {
+        alert.classList.remove('show');
+      }, 5000);
+    }
+
+    // Logout
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      localStorage.removeItem('userId');
+      window.location.href = '/login.html';
+    }
+  </script>
+</body>
+</html>

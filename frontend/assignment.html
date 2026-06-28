@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Assignment Tracker</title>
+
+<link rel="stylesheet" href="assignment.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+<h2>NIET Tracker</h2>
+
+<ul>
+
+<li><a href="dashboard.html">
+<i class="fas fa-home"></i> Dashboard
+</a></li>
+
+<li class="active">
+<a href="#">
+<i class="fas fa-book"></i> Assignments
+</a></li>
+
+<li>
+<a href="#">
+<i class="fas fa-upload"></i> Submissions
+</a></li>
+
+<li>
+<a href="#">
+<i class="fas fa-user"></i> Profile
+</a></li>
+
+<li>
+<a href="index.html">
+<i class="fas fa-sign-out-alt"></i> Logout
+</a></li>
+
+</ul>
+
+</div>
+
+<!-- Main Content -->
+
+<div class="main">
+
+<div class="topbar">
+
+<h1>Assignment Management</h1>
+
+<button class="upload-btn">
+<i class="fas fa-plus"></i>
+New Assignment
+</button>
+
+</div>
+
+<!-- Search -->
+
+<div class="search-box">
+
+<input
+type="text"
+placeholder="Search Assignment...">
+
+<select>
+
+<option>All Subjects</option>
+<option>Java</option>
+<option>DBMS</option>
+<option>DSA</option>
+<option>Web Technology</option>
+
+</select>
+
+</div>
+
+<!-- Cards -->
+
+<div class="assignment-grid">
+
+<!-- Card -->
+
+<div class="card">
+
+<div class="status pending">
+Pending
+</div>
+
+<h3>Java OOP Project</h3>
+
+<p>
+Build Assignment Submission Tracker using OOP Concepts.
+</p>
+
+<div class="info">
+
+<span>
+<i class="fas fa-calendar"></i>
+Due: 10 Aug
+</span>
+
+<span>
+<i class="fas fa-book"></i>
+Java
+</span>
+
+</div>
+<!-- <a href="submit-assignment.html" class="submit-btn">
+    Submit Assignment
+</a> -->
+<button>
+    <a href="submit-assignment.html" class="submit-btn">
+    Submit Assignment
+</a>
+<!-- Submit Assignment -->
+ </button>
+
+</div>
+
+<!-- Card -->
+
+<div class="card">
+
+<div class="status submitted">
+Submitted
+</div>
+
+<h3>DBMS Mini Project</h3>
+
+<p>
+Create Student Database Management System.
+</p>
+
+<div class="info">
+
+<span>
+<i class="fas fa-calendar"></i>
+Due: 15 Aug
+</span>
+
+<span>
+<i class="fas fa-book"></i>
+DBMS
+</span>
+
+</div>
+
+<button class="submitted-btn">
+View Submission
+</button>
+
+</div>
+
+<!-- Card -->
+
+<div class="card">
+
+<div class="status late">
+Late
+</div>
+
+<h3>Web Technology</h3>
+
+<p>
+Design Responsive Portfolio Website.
+</p>
+
+<div class="info">
+
+<span>
+<i class="fas fa-calendar"></i>
+Due: 5 Aug
+</span>
+
+<span>
+<i class="fas fa-book"></i>
+HTML/CSS
+</span>
+
+</div>
+
+<button>
+Submit Now
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
