@@ -1040,6 +1040,62 @@ app.put('/api/admin/submissions/:submissionId/grade', verifyToken, async (req, r
 });
 
 // ========================
+// STUDENT MANAGEMENT ROUTES
+// ========================
+
+// List all Students
+app.get('/api/admin/students', verifyToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+    const connection = await pool.getConnection();
+    const [students] = await connection.execute(
+      `SELECT id, fullName, email, createdAt FROM users WHERE role = 'student' ORDER BY createdAt DESC`
+    );
+    connection.release();
+    res.status(200).json(students);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// Reset Student Password
+app.put('/api/admin/students/:id/reset-password', verifyToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+    const studentId = req.params.id;
+    const { newPassword } = req.body;
+    
+    if (!newPassword || newPassword.length < 6) {
+      return res.status(400).json({ message: 'Password must be at least 6 characters long' });
+    }
+
+    const hashedPassword = await bcryptjs.hash(newPassword, 10);
+    const connection = await pool.getConnection();
+    
+    const [result] = await connection.execute(
+      'UPDATE users SET password = ? WHERE id = ? AND role = "student"',
+      [hashedPassword, studentId]
+    );
+    
+    connection.release();
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+    
+    res.status(200).json({ message: 'Password reset successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// ========================
 // ADMIN MANAGEMENT ROUTES
 // ========================
 

@@ -886,6 +886,49 @@
         grid-template-columns: 1fr;
       }
     }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        width: 260px;
+        padding: 30px 20px;
+        z-index: 9999;
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .logo-text, .sidebar-menu li a span, .logout-btn span, .logo-container p {
+        display: block;
+      }
+      .sidebar-menu li a {
+        justify-content: flex-start;
+        padding: 12px 16px;
+      }
+      .logo-container {
+        justify-content: flex-start;
+        margin-bottom: 30px;
+      }
+      .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+      }
+      .hamburger-btn {
+        display: block !important;
+      }
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      .topbar-right {
+        width: 100%;
+        justify-content: flex-end;
+      }
+      .settings-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -927,6 +970,12 @@
             </a>
           </li>
           <li>
+            <a href="#" class="nav-link" data-target="students">
+              <i class="fa-solid fa-users"></i>
+              <span>Student Records</span>
+            </a>
+          </li>
+          <li>
             <a href="#" class="nav-link" data-target="admins">
               <i class="fa-solid fa-user-shield"></i>
               <span>Manage Admins</span>
@@ -953,9 +1002,14 @@
   <!-- Main panel content -->
   <main class="main-content">
     <header class="topbar">
-      <div class="topbar-left">
-        <h1 id="headerViewTitle">Admin Dashboard</h1>
-        <p id="headerViewSub">Manage assignments, evaluate submissions, and edit settings</p>
+      <div class="topbar-left" style="display: flex; align-items: center; gap: 15px;">
+        <button id="mobileMenuBtn" class="hamburger-btn" style="display: none; background: none; border: none; color: white; font-size: 24px; cursor: pointer;">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div>
+          <h1 id="headerViewTitle">Admin Dashboard</h1>
+          <p id="headerViewSub">Manage assignments, evaluate submissions, and edit settings</p>
+        </div>
       </div>
 
       <div class="topbar-right">
@@ -1197,6 +1251,38 @@
       </div>
     </section>
 
+    <!-- SECTION: Student Records -->
+    <section id="view-students" class="view-section">
+      <div class="panel-card" style="margin-bottom: 25px;">
+        <div class="panel-header">
+          <div class="panel-title">
+            <i class="fa-solid fa-users"></i>
+            Student Records
+          </div>
+        </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Joined Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="studentRecordsTableBody">
+              <!-- Data populated by JS -->
+            </tbody>
+          </table>
+          <div id="studentRecordsEmptyState" class="empty-state" style="display: none;">
+            <i class="fa-solid fa-users-slash"></i>
+            <h3>No Students Found</h3>
+            <p>There are no registered students in the system yet.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- SECTION: Portal Settings -->
     <section id="view-settings" class="view-section">
       <div class="settings-grid" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px;">
@@ -1310,6 +1396,35 @@
           <div style="display: flex; gap: 15px; margin-top: 25px;">
             <button type="button" class="btn-secondary" style="flex:1; padding:12px;" id="gradeCancelBtn">Cancel</button>
             <button type="submit" class="btn-submit" style="flex:1; padding:12px;">Submit Evaluation</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal overlay: Reset Password -->
+  <div class="modal-overlay" id="resetPasswordModalOverlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Reset Student Password</h3>
+        <button class="modal-close-btn" onclick="document.getElementById('resetPasswordModalOverlay').style.display='none'"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="resetPasswordForm">
+          <input type="hidden" id="resetPasswordStudentId">
+          <div class="form-group" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 15px; margin-bottom: 20px;">
+            <p>Student Name: <strong id="resetPasswordStudentName">Name</strong></p>
+            <p style="margin-top: 5px; color: var(--accent-red); font-size: 13px;">This will permanently change their password.</p>
+          </div>
+
+          <div class="form-group">
+            <label>New Password</label>
+            <input type="password" id="resetNewPassword" placeholder="Enter new password (min 6 chars)" required minlength="6">
+          </div>
+          
+          <div style="display: flex; gap: 15px; margin-top: 25px;">
+            <button type="button" class="btn-secondary" style="flex:1; padding:12px;" onclick="document.getElementById('resetPasswordModalOverlay').style.display='none'">Cancel</button>
+            <button type="submit" class="btn-submit" style="flex:1; padding:12px;">Reset Password</button>
           </div>
         </form>
       </div>
@@ -1496,6 +1611,7 @@
         dashboard: { title: "Admin Dashboard", sub: "Manage assignments, evaluate submissions, and edit settings" },
         create: { title: "Create Assignment", sub: "Design a new assignment task and assign it to all students" },
         assignments: { title: "My Assignments", sub: "View your active coursework and evaluate student submissions" },
+        students: { title: "Student Records", sub: "View registered students and manage their passwords" },
         admins: { title: "Manage Administrators", sub: "Manage, create, or deactivate portal administrators" },
         settings: { title: "Portal Settings", sub: "Configure your profile parameters or change your password" }
       };
@@ -1595,6 +1711,66 @@
         showToast('Error loading tracking data', 'error');
       }
     }
+
+    // Load Students Function
+    async function loadStudents() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/admin/students`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (!response.ok) return;
+        
+        const students = await response.json();
+        const tbody = document.getElementById('studentRecordsTableBody');
+        const emptyState = document.getElementById('studentRecordsEmptyState');
+        const table = tbody.closest('table');
+        
+        if (students.length === 0) {
+          table.style.display = 'none';
+          emptyState.style.display = 'flex';
+          return;
+        }
+        
+        table.style.display = 'table';
+        emptyState.style.display = 'none';
+        tbody.innerHTML = '';
+        
+        students.forEach(student => {
+          const joinedDate = new Date(student.createdAt).toLocaleDateString('en-IN', {
+            year: 'numeric', month: 'short', day: 'numeric'
+          });
+          
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>
+              <div style="font-weight: 600; color: white;">${student.fullName}</div>
+            </td>
+            <td>
+              <div style="color: var(--text-muted);">${student.email}</div>
+            </td>
+            <td>${joinedDate}</td>
+            <td>
+              <button class="btn-action" onclick="openResetPasswordModal('${student.id}', '${student.fullName.replace(/'/g, "\\'")}')">
+                <i class="fa-solid fa-key"></i> Reset Password
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (error) {
+        console.error('Error loading students:', error);
+      }
+    }
+
+    // Open Reset Password Modal
+    window.openResetPasswordModal = function(studentId, studentName) {
+      document.getElementById('resetPasswordStudentId').value = studentId;
+      document.getElementById('resetPasswordStudentName').textContent = studentName;
+      document.getElementById('resetNewPassword').value = '';
+      document.getElementById('resetPasswordModalOverlay').style.display = 'flex';
+    };
 
     // Render stats and feeds on home
     function renderDashboardStats(activeAdminsCount) {
@@ -1896,46 +2072,97 @@
       });
 
       // Submit grade
-      document.getElementById('gradeSubmissionForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
+      const gradeSubmissionForm = document.getElementById('gradeSubmissionForm');
+      if (gradeSubmissionForm) {
+        gradeSubmissionForm.addEventListener('submit', async function(e) {
+          e.preventDefault();
 
-        const submissionId = document.getElementById('gradeSubmissionId').value;
-        const marks = document.getElementById('gradeMarks').value;
-        const feedback = document.getElementById('gradeFeedback').value.trim();
-        const token = localStorage.getItem('token');
+          const submissionId = document.getElementById('gradeSubmissionId').value;
+          const marks = document.getElementById('gradeMarks').value;
+          const feedback = document.getElementById('gradeFeedback').value.trim();
+          const token = localStorage.getItem('token');
 
-        try {
-          const response = await fetch(`${API_URL}/admin/submissions/${submissionId}/grade`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ marks, feedback })
-          });
+          try {
+            const response = await fetch(`${API_URL}/admin/submissions/${submissionId}/grade`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify({ marks, feedback })
+            });
 
-          const data = await response.json();
+            const data = await response.json();
 
-          if (!response.ok) throw new Error(data.message || 'Failed to submit grade');
+            if (!response.ok) throw new Error(data.message || 'Failed to submit grade');
 
-          showToast('Graded submission successfully!');
-          closeGradingModal();
-          
-          // Reload Details view
-          const activeAssignmentTitle = document.getElementById('detailAssignmentTitle').textContent;
-          const targetAsg = adminAssignments.find(a => a.title === activeAssignmentTitle);
-          if (targetAsg) {
-            await loadAssignmentDetails(targetAsg.id, targetAsg.title, targetAsg.subject, targetAsg.dueDate);
+            showToast('Graded submission successfully!');
+            closeGradingModal();
+            
+            // Reload Details view
+            const activeAssignmentTitle = document.getElementById('detailAssignmentTitle').textContent;
+            const targetAsg = adminAssignments.find(a => a.title === activeAssignmentTitle);
+            if (targetAsg) {
+              await loadAssignmentDetails(targetAsg.id, targetAsg.title, targetAsg.subject, targetAsg.dueDate);
+            }
+
+            // Reload stats backgrounds
+            loadData();
+
+          } catch (error) {
+            console.error(error);
+            showToast(error.message || 'Error submitting grade', 'error');
+          }
+        });
+      }
+
+      // Set up reset password form
+      const resetPasswordForm = document.getElementById('resetPasswordForm');
+      if (resetPasswordForm) {
+        resetPasswordForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const studentId = document.getElementById('resetPasswordStudentId').value;
+          const newPassword = document.getElementById('resetNewPassword').value;
+
+          if (newPassword.length < 6) {
+            showToast('Password must be at least 6 characters', 'error');
+            return;
           }
 
-          // Reload stats backgrounds
-          loadData();
+          const submitBtn = e.target.querySelector('button[type="submit"]');
+          const originalText = submitBtn.textContent;
+          submitBtn.textContent = 'Resetting...';
+          submitBtn.disabled = true;
 
-        } catch (error) {
-          console.error(error);
-          showToast(error.message || 'Error submitting grade', 'error');
-        }
-      });
+          try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${API_URL}/admin/students/${studentId}/reset-password`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify({ newPassword })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              showToast('Password reset successfully!', 'success');
+              document.getElementById('resetPasswordModalOverlay').style.display = 'none';
+              e.target.reset();
+            } else {
+              showToast(data.message || 'Failed to reset password', 'error');
+            }
+          } catch (error) {
+            console.error('Error resetting password:', error);
+            showToast('A network error occurred', 'error');
+          } finally {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+          }
+        });
+      }
 
       // Back to grid view button
       document.getElementById('backToAssignmentsBtn').addEventListener('click', function() {
