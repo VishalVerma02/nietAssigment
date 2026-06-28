@@ -855,6 +855,24 @@
       border-color: var(--accent-blue);
     }
 
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(5px);
+      z-index: 9998;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .sidebar-overlay.show {
+      display: block;
+      opacity: 1;
+    }
+
     /* Responsive */
     @media (max-width: 1024px) {
       .sidebar {
@@ -890,9 +908,10 @@
     @media (max-width: 768px) {
       .sidebar {
         transform: translateX(-100%);
-        width: 260px;
+        width: 280px;
         padding: 30px 20px;
         z-index: 9999;
+        box-shadow: 10px 0 30px rgba(0,0,0,0.6);
       }
       .sidebar.open {
         transform: translateX(0);
@@ -932,6 +951,9 @@
   </style>
 </head>
 <body>
+
+  <!-- Sidebar Overlay -->
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
   <!-- Toast alerts container -->
   <div class="toast-container" id="toastContainer"></div>
@@ -1003,7 +1025,7 @@
   <main class="main-content">
     <header class="topbar">
       <div class="topbar-left" style="display: flex; align-items: center; gap: 15px;">
-        <button id="mobileMenuBtn" class="hamburger-btn" style="display: none; background: none; border: none; color: white; font-size: 24px; cursor: pointer;">
+        <button id="mobileMenuBtn" class="hamburger-btn" style="display: none; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: white; font-size: 20px; cursor: pointer; padding: 8px 12px; border-radius: 10px; transition: all 0.3s ease;">
           <i class="fa-solid fa-bars"></i>
         </button>
         <div>
@@ -1653,6 +1675,46 @@
           if (matchingLink) matchingLink.click();
         });
       });
+
+      // Hamburger Menu Logic
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      const sidebar = document.querySelector('.sidebar');
+
+      if (mobileMenuBtn && sidebar && sidebarOverlay) {
+        function toggleSidebar() {
+          const isOpen = sidebar.classList.contains('open');
+          if (isOpen) {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('show');
+            setTimeout(() => sidebarOverlay.style.display = 'none', 300);
+            mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+            mobileMenuBtn.style.background = 'rgba(255,255,255,0.05)';
+            mobileMenuBtn.style.color = 'white';
+            mobileMenuBtn.style.borderColor = 'var(--border-color)';
+          } else {
+            sidebarOverlay.style.display = 'block';
+            setTimeout(() => sidebarOverlay.classList.add('show'), 10);
+            sidebar.classList.add('open');
+            mobileMenuBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            mobileMenuBtn.style.background = 'rgba(239,68,68,0.1)';
+            mobileMenuBtn.style.color = 'var(--accent-red)';
+            mobileMenuBtn.style.borderColor = 'rgba(239,68,68,0.3)';
+          }
+        }
+        
+        mobileMenuBtn.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+        
+        // Close sidebar on mobile when a link is clicked
+        navLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+              toggleSidebar();
+            }
+          });
+        });
+      }
     }
 
     // Fetch assignments and load stats

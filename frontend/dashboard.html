@@ -1439,6 +1439,24 @@
       color: rgba(255, 255, 255, 0.1);
     }
 
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(5px);
+      z-index: 9998;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .sidebar-overlay.show {
+      display: block;
+      opacity: 1;
+    }
+
     /* Responsive styling */
     @media (max-width: 1024px) {
       .sidebar {
@@ -1468,7 +1486,36 @@
       .progress-stats-grid { grid-template-columns: 1fr; }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+        padding: 30px 20px;
+        z-index: 9999;
+        box-shadow: 10px 0 30px rgba(0,0,0,0.6);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .logo-text, .sidebar-menu li a span, .logout-btn span, .logo-container p {
+        display: block;
+      }
+      .sidebar-menu li a {
+        justify-content: flex-start;
+        padding: 12px 16px;
+      }
+      .logo-container {
+        justify-content: flex-start;
+        margin-bottom: 30px;
+      }
+      .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+      }
+      .hamburger-btn {
+        display: block !important;
+      }
       .topbar {
         flex-direction: column;
         align-items: flex-start;
@@ -1476,14 +1523,19 @@
       }
       .topbar-right {
         width: 100%;
-        justify-content: space-between;
+        justify-content: flex-end;
       }
-      .main-content { padding: 15px; }
+      .dashboard-split, .settings-grid, .progress-stats-grid {
+        grid-template-columns: 1fr;
+      }
       .welcome-banner { padding: 20px; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Sidebar Overlay -->
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
   <!-- Toast Alert Container -->
   <div class="toast-container" id="toastContainer"></div>
@@ -1556,9 +1608,14 @@
     
     <!-- Top Header Bar -->
     <header class="topbar">
-      <div class="topbar-left">
-        <h1 id="headerViewTitle">Dashboard Overview</h1>
-        <p id="headerViewSub">Manage assignments, track status, and view feedback</p>
+      <div class="topbar-left" style="display: flex; align-items: center; gap: 15px;">
+        <button id="mobileMenuBtn" class="hamburger-btn" style="display: none; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: white; font-size: 20px; cursor: pointer; padding: 8px 12px; border-radius: 10px; transition: all 0.3s ease;">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div>
+          <h1 id="headerViewTitle">Dashboard Overview</h1>
+          <p id="headerViewSub">Manage assignments, track status, and view feedback</p>
+        </div>
       </div>
 
       <div class="topbar-right">
@@ -2106,6 +2163,46 @@
           if (matchingLink) matchingLink.click();
         });
       });
+
+      // Hamburger Menu Logic
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      const sidebar = document.querySelector('.sidebar');
+
+      if (mobileMenuBtn && sidebar && sidebarOverlay) {
+        function toggleSidebar() {
+          const isOpen = sidebar.classList.contains('open');
+          if (isOpen) {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('show');
+            setTimeout(() => sidebarOverlay.style.display = 'none', 300);
+            mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+            mobileMenuBtn.style.background = 'rgba(255,255,255,0.05)';
+            mobileMenuBtn.style.color = 'white';
+            mobileMenuBtn.style.borderColor = 'var(--border-color)';
+          } else {
+            sidebarOverlay.style.display = 'block';
+            setTimeout(() => sidebarOverlay.classList.add('show'), 10);
+            sidebar.classList.add('open');
+            mobileMenuBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            mobileMenuBtn.style.background = 'rgba(239,68,68,0.1)';
+            mobileMenuBtn.style.color = 'var(--accent-red)';
+            mobileMenuBtn.style.borderColor = 'rgba(239,68,68,0.3)';
+          }
+        }
+        
+        mobileMenuBtn.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+        
+        // Close sidebar on mobile when a link is clicked
+        navLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+              toggleSidebar();
+            }
+          });
+        });
+      }
     }
 
     // Notification Dropdown Action
