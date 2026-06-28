@@ -1169,6 +1169,13 @@ app.delete('/api/admin/:id', verifyToken, async (req, res) => {
 // SERVER START
 // ========================
 
+app.get('/', (req, res) => {
+  res.json({
+    status: 'success',
+    message: 'NIET Assignment Tracker Backend API is running successfully!'
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
