@@ -478,6 +478,10 @@
   document.head.appendChild(style);
 
   // Fetch when DOM is ready
-  document.addEventListener('DOMContentLoaded', fetchPublicStats);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fetchPublicStats);
+  } else {
+    fetchPublicStats();
+  }
 </script></body>
 </html>
