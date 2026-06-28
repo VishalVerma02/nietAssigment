@@ -299,12 +299,12 @@ app.get('/api/auth/me', verifyToken, async (req, res) => {
 app.get('/api/public/stats', async (req, res) => {
   try {
     const connection = await pool.getConnection();
-    const [assignments] = await connection.execute('SELECT COUNT(id) as total FROM assignments WHERE status = "active"');
-    const [submissions] = await connection.execute('SELECT COUNT(id) as total FROM student_assignments WHERE status = "submitted" OR status = "completed"');
-    const [pending] = await connection.execute('SELECT COUNT(id) as total FROM student_assignments WHERE status = "pending"');
+    const [assignments] = await connection.execute("SELECT COUNT(id) as total FROM assignments WHERE status = 'active'");
+    const [submissions] = await connection.execute("SELECT COUNT(id) as total FROM student_assignments WHERE status = 'submitted' OR status = 'completed'");
+    const [pending] = await connection.execute("SELECT COUNT(id) as total FROM student_assignments WHERE status = 'pending'");
     
     // Fetch 3 recent active assignments
-    const [recent] = await connection.execute('SELECT title, dueDate FROM assignments WHERE status = "active" ORDER BY dueDate ASC LIMIT 3');
+    const [recent] = await connection.execute("SELECT title, dueDate FROM assignments WHERE status = 'active' ORDER BY dueDate ASC LIMIT 3");
     
     connection.release();
 
