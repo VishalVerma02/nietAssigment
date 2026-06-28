@@ -325,10 +325,30 @@ app.post('/api/auth/register', async (req, res) => {
     const hashedPassword = await bcryptjs.hash(password, 10);
 
     // Insert user (default role: student)
-    await connection.execute(
+    const [userResult] = await connection.execute(
       'INSERT INTO users (fullName, email, password, role) VALUES (?, ?, ?, ?)',
       [fullName, email, hashedPassword, 'student']
     );
+    const newStudentId = userResult.insertId;
+
+    // Automatically assign all existing active assignments to the new student
+    const [activeAssignments] = await connection.execute(
+      'SELECT id, title, dueDate FROM assignments WHERE status = ?',
+      ['active']
+    );
+
+    for (const assignment of activeAssignments) {
+      await connection.execute(
+        'INSERT INTO student_assignments (studentId, assignmentId, status) VALUES (?, ?, ?)',
+        [newStudentId, assignment.id, 'pending']
+      );
+
+      // Create notification
+      await connection.execute(
+        'INSERT INTO notifications (studentId, assignmentId, message, type, isRead) VALUES (?, ?, ?, ?, ?)',
+        [newStudentId, assignment.id, `New assignment: ${assignment.title} due on ${assignment.dueDate}`, 'new_assignment', false]
+      );
+    }
 
     connection.release();
     res.status(201).json({ message: 'Registration successful' });
@@ -481,7 +501,7 @@ app.get('/api/admin/assignments', verifyToken, async (req, res) => {
     const connection = await pool.getConnection();
 
     const [assignments] = await connection.execute(
-      'SELECT a.*, COUNT(sa.id) as totalStudents, SUM(CASE WHEN sa.status = "submitted" THEN 1 ELSE 0 END) as submittedCount FROM assignments a LEFT JOIN student_assignments sa ON a.id = sa.assignmentId WHERE a.adminId = ? GROUP BY a.id ORDER BY a.dueDate DESC',
+      'SELECT a.*, COUNT(sa.id) as totalStudents, SUM(CASE WHEN sa.status = \'submitted\' THEN 1 ELSE 0 END) as submittedCount FROM assignments a LEFT JOIN student_assignments sa ON a.id = sa.assignmentId WHERE a.adminId = ? GROUP BY a.id ORDER BY a.dueDate DESC',
       [req.user.userId]
     );
 
