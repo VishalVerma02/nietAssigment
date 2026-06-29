@@ -311,6 +311,7 @@
       gap: 20px;
       box-shadow: var(--card-shadow);
       transition: all 0.3s ease;
+      cursor: pointer;
     }
 
     .stat-card:hover {
@@ -1057,7 +1058,7 @@
 
       <!-- Stats Grid -->
       <div class="stats-grid">
-        <div class="stat-card">
+        <div class="stat-card" id="card-total-assignments">
           <div class="stat-icon assignments"><i class="fa-solid fa-file-contract"></i></div>
           <div class="stat-info">
             <span class="stat-number" id="stat-total-assignments">0</span>
@@ -1065,7 +1066,7 @@
           </div>
         </div>
 
-        <div class="stat-card">
+        <div class="stat-card" id="card-submissions">
           <div class="stat-icon submissions"><i class="fa-solid fa-inbox"></i></div>
           <div class="stat-info">
             <span class="stat-number" id="stat-total-submissions">0</span>
@@ -1073,7 +1074,7 @@
           </div>
         </div>
 
-        <div class="stat-card">
+        <div class="stat-card" id="card-pending-reviews">
           <div class="stat-icon pending"><i class="fa-solid fa-hourglass-half"></i></div>
           <div class="stat-info">
             <span class="stat-number" id="stat-pending-reviews">0</span>
@@ -1081,7 +1082,7 @@
           </div>
         </div>
 
-        <div class="stat-card">
+        <div class="stat-card" id="card-active-admins">
           <div class="stat-icon admins"><i class="fa-solid fa-user-shield"></i></div>
           <div class="stat-info">
             <span class="stat-number" id="stat-active-admins">0</span>
@@ -2559,6 +2560,41 @@
       });
     }
 
+    function setupStatsClickEvents() {
+      const cardTotal = document.getElementById('card-total-assignments');
+      const cardSubmissions = document.getElementById('card-submissions');
+      const cardPending = document.getElementById('card-pending-reviews');
+      const cardAdmins = document.getElementById('card-active-admins');
+
+      if (cardTotal) {
+        cardTotal.addEventListener('click', () => {
+          const link = document.querySelector('.nav-link[data-target="assignments"]');
+          if (link) link.click();
+        });
+      }
+
+      if (cardSubmissions) {
+        cardSubmissions.addEventListener('click', () => {
+          const link = document.querySelector('.nav-link[data-target="assignments"]');
+          if (link) link.click();
+        });
+      }
+
+      if (cardPending) {
+        cardPending.addEventListener('click', () => {
+          const link = document.querySelector('.nav-link[data-target="assignments"]');
+          if (link) link.click();
+        });
+      }
+
+      if (cardAdmins) {
+        cardAdmins.addEventListener('click', () => {
+          const link = document.querySelector('.nav-link[data-target="admins"]');
+          if (link) link.click();
+        });
+      }
+    }
+
     // Setup Logout
     function setupLogoutEvents() {
       const performLogout = () => {
@@ -2581,6 +2617,7 @@
         setupGradingEvents();
         setupAdminManagement();
         setupSettingsEvents();
+        setupStatsClickEvents();
         setupLogoutEvents();
 
         // Open date picker when clicking anywhere on the input field

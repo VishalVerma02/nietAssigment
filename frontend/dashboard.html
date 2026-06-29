@@ -443,6 +443,7 @@
       gap: 20px;
       box-shadow: var(--card-shadow);
       transition: all 0.3s ease;
+      cursor: pointer;
     }
 
     .stat-card:hover {
@@ -1662,7 +1663,7 @@
 
       <!-- Stats counter boxes -->
       <div class="stats-grid">
-        <div class="stat-card">
+        <div class="stat-card" id="card-total-assigned">
           <div class="stat-icon total"><i class="fa-solid fa-folder-open"></i></div>
           <div class="stat-info">
             <span class="stat-number" id="stat-total">0</span>
@@ -1670,7 +1671,7 @@
           </div>
         </div>
 
-        <div class="stat-card">
+        <div class="stat-card" id="card-pending-review">
           <div class="stat-icon pending"><i class="fa-solid fa-hourglass-half"></i></div>
           <div class="stat-info">
             <span class="stat-number" id="stat-pending">0</span>
@@ -1678,7 +1679,7 @@
           </div>
         </div>
 
-        <div class="stat-card">
+        <div class="stat-card" id="card-submitted">
           <div class="stat-icon submitted"><i class="fa-solid fa-circle-check"></i></div>
           <div class="stat-info">
             <span class="stat-number" id="stat-submitted">0</span>
@@ -1686,7 +1687,7 @@
           </div>
         </div>
 
-        <div class="stat-card">
+        <div class="stat-card" id="card-overdue-tasks">
           <div class="stat-icon overdue"><i class="fa-solid fa-triangle-exclamation"></i></div>
           <div class="stat-info">
             <span class="stat-number" id="stat-overdue">0</span>
@@ -2968,6 +2969,53 @@
       });
     }
 
+    function setupStatsClickEvents() {
+      const cardTotal = document.getElementById('card-total-assigned');
+      const cardPending = document.getElementById('card-pending-review');
+      const cardSubmitted = document.getElementById('card-submitted');
+      const cardOverdue = document.getElementById('card-overdue-tasks');
+
+      if (cardTotal) {
+        cardTotal.addEventListener('click', () => {
+          const link = document.querySelector('.nav-link[data-target="assignments"]');
+          if (link) link.click();
+          setTimeout(() => {
+            const tab = document.querySelector('.tab-pill[data-status-filter="all"]');
+            if (tab) tab.click();
+          }, 50);
+        });
+      }
+
+      if (cardPending) {
+        cardPending.addEventListener('click', () => {
+          const link = document.querySelector('.nav-link[data-target="assignments"]');
+          if (link) link.click();
+          setTimeout(() => {
+            const tab = document.querySelector('.tab-pill[data-status-filter="pending"]');
+            if (tab) tab.click();
+          }, 50);
+        });
+      }
+
+      if (cardSubmitted) {
+        cardSubmitted.addEventListener('click', () => {
+          const link = document.querySelector('.nav-link[data-target="submissions"]');
+          if (link) link.click();
+        });
+      }
+
+      if (cardOverdue) {
+        cardOverdue.addEventListener('click', () => {
+          const link = document.querySelector('.nav-link[data-target="assignments"]');
+          if (link) link.click();
+          setTimeout(() => {
+            const tab = document.querySelector('.tab-pill[data-status-filter="overdue"]');
+            if (tab) tab.click();
+          }, 50);
+        });
+      }
+    }
+
     function setupSettingsEvents() {
       document.getElementById('settingsProfileForm').addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -3151,6 +3199,7 @@
         setupNotificationDropdown();
         setupModalEvents();
         setupFilterEvents();
+        setupStatsClickEvents();
         setupSettingsEvents();
         setupLogoutEvents();
 
