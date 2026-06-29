@@ -222,6 +222,13 @@
       border: 1px solid var(--border-color);
       padding: 6px 16px 6px 6px;
       border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .profile-card:hover {
+      border-color: rgba(14, 165, 233, 0.4);
+      background: rgba(255, 255, 255, 0.02);
     }
 
     .profile-avatar {
@@ -236,14 +243,6 @@
       justify-content: center;
       font-size: 16px;
       box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .profile-avatar:hover {
-      transform: scale(1.05);
-      filter: brightness(1.1);
-      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
     }
 
     .profile-details {
@@ -1045,7 +1044,7 @@
 
       <div class="topbar-right">
         <!-- Profile info -->
-        <div class="profile-card">
+        <div class="profile-card" id="profileCardHeader">
           <div class="profile-avatar" id="avatarInitial" style="overflow: hidden;">A</div>
           <div class="profile-details">
             <span class="profile-name" id="profileNameDisplay">Admin User</span>
@@ -2486,30 +2485,9 @@
           reader.readAsDataURL(file);
         });
       }
-    }
 
-    function setupAvatarClickEvents() {
-      // 1. Header avatar
-      const avatar = document.getElementById('avatarInitial');
-      if (avatar) {
-        avatar.title = "Click to upload profile picture";
-        avatar.addEventListener('click', () => {
-          const input = document.getElementById('profilePicInput');
-          if (input) input.click();
-        });
-      }
-
-      // 2. Settings container avatar
-      const settingsAvatar = document.getElementById('settingsAvatarContainer');
-      if (settingsAvatar) {
-        settingsAvatar.style.cursor = 'pointer';
-        settingsAvatar.title = "Click to upload profile picture";
-        settingsAvatar.addEventListener('click', () => {
-          const input = document.getElementById('profilePicInput');
-          if (input) input.click();
-        });
-      }
-    }
+      // Remove Profile Picture Handler
+      const removeBtn = document.getElementById('removeProfilePicBtn');
 
       // Remove Profile Picture Handler
       const removeBtn = document.getElementById('removeProfilePicBtn');
@@ -2590,6 +2568,29 @@
           showToast(error.message || 'Password update failed. Check current password.', 'error');
         }
       });
+    }
+
+    function setupAvatarClickEvents() {
+      // 1. Header profile card (avatar + name)
+      const profileCard = document.getElementById('profileCardHeader');
+      if (profileCard) {
+        profileCard.title = "Click to upload profile picture";
+        profileCard.addEventListener('click', () => {
+          const input = document.getElementById('profilePicInput');
+          if (input) input.click();
+        });
+      }
+
+      // 2. Settings container avatar
+      const settingsAvatar = document.getElementById('settingsAvatarContainer');
+      if (settingsAvatar) {
+        settingsAvatar.style.cursor = 'pointer';
+        settingsAvatar.title = "Click to upload profile picture";
+        settingsAvatar.addEventListener('click', () => {
+          const input = document.getElementById('profilePicInput');
+          if (input) input.click();
+        });
+      }
     }
 
     function setupStatsClickEvents() {
