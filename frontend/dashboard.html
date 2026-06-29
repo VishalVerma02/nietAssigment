@@ -354,6 +354,14 @@
       justify-content: center;
       font-size: 16px;
       box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .profile-avatar:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
     }
 
     .profile-details {
@@ -3107,6 +3115,30 @@
           reader.readAsDataURL(file);
         });
       }
+    }
+
+    function setupAvatarClickEvents() {
+      // 1. Header avatar
+      const avatar = document.getElementById('avatarInitial');
+      if (avatar) {
+        avatar.title = "Click to upload profile picture";
+        avatar.addEventListener('click', () => {
+          const input = document.getElementById('profilePicInput');
+          if (input) input.click();
+        });
+      }
+
+      // 2. Settings container avatar
+      const settingsAvatar = document.getElementById('settingsAvatarContainer');
+      if (settingsAvatar) {
+        settingsAvatar.style.cursor = 'pointer';
+        settingsAvatar.title = "Click to upload profile picture";
+        settingsAvatar.addEventListener('click', () => {
+          const input = document.getElementById('profilePicInput');
+          if (input) input.click();
+        });
+      }
+    }
 
       // Remove Profile Picture Handler
       const removeBtn = document.getElementById('removeProfilePicBtn');
@@ -3200,6 +3232,7 @@
         setupModalEvents();
         setupFilterEvents();
         setupStatsClickEvents();
+        setupAvatarClickEvents();
         setupSettingsEvents();
         setupLogoutEvents();
 
