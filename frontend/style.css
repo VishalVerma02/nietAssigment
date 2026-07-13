@@ -489,6 +489,11 @@ footer{
     gap:15px;
 }
 
+.socials a{
+    color:inherit;
+    text-decoration:none;
+}
+
 .socials i{
     width:45px;
     height:45px;
