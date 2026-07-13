@@ -204,9 +204,9 @@
 
       <h2>Assignment Progress</h2>
 
-      <div class="circle">
-        <h1>28</h1>
-        <p>Total</p>
+      <div class="circle" id="progress-circle">
+        <h1>0</h1>
+        <p>Total Tasks</p>
       </div>
 
       <div class="progress-info">
@@ -216,8 +216,8 @@
           Submitted
         </div>
 
-        <div>
-          16 (57%)
+        <div id="progress-submitted-text">
+          0 (0%)
         </div>
 
       </div>
@@ -229,8 +229,8 @@
           Pending
         </div>
 
-        <div>
-          12 (43%)
+        <div id="progress-pending-text">
+          0 (0%)
         </div>
 
       </div>
@@ -251,29 +251,21 @@
 
       <table>
 
-        <tr>
-          <th>Title</th>
-          <th>Subject</th>
-          <th>Status</th>
-        </tr>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Subject</th>
+            <th>Status</th>
+          </tr>
+        </thead>
 
-        <tr>
-          <td>DBMS Project</td>
-          <td>DBMS</td>
-          <td><span class="pending">Pending</span></td>
-        </tr>
-
-        <tr>
-          <td>AI Assignment</td>
-          <td>AI</td>
-          <td><span class="submitted">Submitted</span></td>
-        </tr>
-
-        <tr>
-          <td>Maths Problem</td>
-          <td>Maths</td>
-          <td><span class="submitted">Submitted</span></td>
-        </tr>
+        <tbody id="upcoming-assignments-body">
+          <tr>
+            <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 20px;">
+              Loading assignments...
+            </td>
+          </tr>
+        </tbody>
 
       </table>
 
@@ -389,6 +381,8 @@
     ? `http://${window.location.hostname}:5000/api`
     : 'https://nietassigment.onrender.com/api';
 
+
+
   async function fetchPublicStats() {
     try {
       const response = await fetch(`${API_URL}/public/stats`);
@@ -401,7 +395,7 @@
       animateValue('hero-pending', 0, data.totalPending, 1500);
       animateValue('hero-submitted', 0, data.totalSubmissions, 1500);
 
-      // Render recent assignments
+      // Render recent assignments in hero section
       const deadlinesContainer = document.getElementById('hero-deadlines');
       if (data.recentAssignments && data.recentAssignments.length > 0) {
         deadlinesContainer.innerHTML = data.recentAssignments.map((a, index) => {
@@ -430,12 +424,74 @@
           </div>
         `;
       }
+
+      // Render Mockup Assignment Progress Donut Chart (Platform-wide)
+      const totalTasks = data.totalSubmissions + data.totalPending;
+      const subPercent = totalTasks > 0 ? Math.round((data.totalSubmissions / totalTasks) * 100) : 0;
+      const pendPercent = totalTasks > 0 ? (100 - subPercent) : 0;
+
+      // Update progress numbers
+      document.querySelector('#progress-circle h1').textContent = totalTasks;
+      document.getElementById('progress-submitted-text').textContent = `${data.totalSubmissions} (${subPercent}%)`;
+      document.getElementById('progress-pending-text').textContent = `${data.totalPending} (${pendPercent}%)`;
+
+      // Update conic-gradient dynamically
+      const progressCircle = document.getElementById('progress-circle');
+      if (progressCircle) {
+        progressCircle.style.background = `conic-gradient(
+          #00c853 0% ${subPercent}%,
+          #ff4d6d ${subPercent}% 100%
+        )`;
+      }
+
+      // Render Mockup Upcoming Assignments Table
+      const tableBody = document.getElementById('upcoming-assignments-body');
+      if (data.recentAssignments && data.recentAssignments.length > 0) {
+        tableBody.innerHTML = data.recentAssignments.map(a => {
+          const due = new Date(a.dueDate);
+          const now = new Date();
+          const diffTime = due - now;
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          
+          let statusClass = 'submitted'; // green
+          let timeText = 'Active';
+          if (diffDays <= 2) {
+            statusClass = 'pending'; // red/pink
+            timeText = diffDays > 0 ? `${diffDays} Days Left` : (diffDays === 0 ? 'Due Today' : 'Overdue');
+          } else {
+            timeText = `${diffDays} Days Left`;
+          }
+
+          return `
+            <tr>
+              <td>${a.title}</td>
+              <td>${a.subject || 'N/A'}</td>
+              <td><span class="${statusClass}">${timeText}</span></td>
+            </tr>
+          `;
+        }).join('');
+      } else {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 20px;">
+              No active assignments right now.
+            </td>
+          </tr>
+        `;
+      }
     } catch (error) {
       console.error('Error fetching public stats:', error);
       document.getElementById('hero-deadlines').innerHTML = `
         <div style="text-align: center; color: var(--text-muted); font-size: 14px; padding: 20px;">
           Platform stats currently unavailable.
         </div>
+      `;
+      document.getElementById('upcoming-assignments-body').innerHTML = `
+        <tr>
+          <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 20px;">
+            Platform stats currently unavailable.
+          </td>
+        </tr>
       `;
     }
   }
