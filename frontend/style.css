@@ -519,8 +519,37 @@ footer{
 }
 
 /* ========================= */
-/* RESPONSIVE */
+/* RESPONSIVE & UTILITIES */
 /* ========================= */
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 26px;
+    cursor: pointer;
+    color: white;
+    transition: 0.3s;
+}
+
+.menu-toggle:hover {
+    color: #00d9ff;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 @media(max-width:1100px){
 
@@ -548,19 +577,102 @@ footer{
 
 @media(max-width:768px){
 
+    .navbar{
+        padding: 15px 5%;
+    }
+
+    .menu-toggle {
+        display: block; /* Show hamburger toggle on mobile */
+    }
+
     nav{
-        display:none;
+        display:none; /* Hide default inline menu */
+        flex-direction:column;
+        position:absolute;
+        top:100%;
+        left:0;
+        width:100%;
+        background:#03113d;
+        border-bottom:1px solid rgba(255, 255, 255, 0.1);
+        padding:20px 5%;
+        gap:15px;
+        z-index:999;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    nav.active{
+        display:flex;
+        animation: slideDown 0.3s ease forwards;
+    }
+
+    nav a{
+        font-size:18px;
+        width:100%;
+        text-align:left;
+        padding:8px 0;
+        border-bottom:1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    nav a:last-child{
+        border-bottom:none;
     }
 
     .hero-left h1{
-        font-size:60px;
-        line-height:70px;
+        font-size:44px;
+        line-height:52px;
     }
 
     .section-title h1,
     .dashboard-title,
     .cta-section h1{
         font-size:35px;
+    }
+
+}
+
+@media(max-width:480px){
+
+    .logo img{
+        width:50px;
+    }
+
+    .logo h2{
+        font-size:22px;
+    }
+
+    .logo p{
+        font-size:11px;
+    }
+
+    .login-btn{
+        padding:8px 18px;
+        font-size:14px;
+    }
+
+    .menu-toggle{
+        font-size:22px;
+    }
+
+    .hero-left h1{
+        font-size:32px;
+        line-height:40px;
+    }
+
+    .hero-left p{
+        font-size:14px;
+        line-height:22px;
+    }
+
+    .section-title h1,
+    .dashboard-title,
+    .cta-section h1{
+        font-size:28px;
+    }
+
+    .progress-card,
+    .assignment-table,
+    .quick-actions{
+        padding:20px;
     }
 
 }

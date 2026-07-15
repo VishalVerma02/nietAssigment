@@ -41,6 +41,10 @@
 
   </nav>
 
+  <div class="menu-toggle" id="mobile-menu-toggle" style="display: none;">
+    <i class="fa-solid fa-bars"></i>
+  </div>
+
   <!-- <button class="login-btn"> -->
 
     <a href="login.html" class="login-btn"> <i class="fa-solid fa-user"> </i>  Login </a>
@@ -249,25 +253,27 @@
 
       </div>
 
-      <table>
+      <div class="table-responsive">
+        <table>
 
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Subject</th>
-            <th>Status</th>
-          </tr>
-        </thead>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Subject</th>
+              <th>Status</th>
+            </tr>
+          </thead>
 
-        <tbody id="upcoming-assignments-body">
-          <tr>
-            <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 20px;">
-              Loading assignments...
-            </td>
-          </tr>
-        </tbody>
+          <tbody id="upcoming-assignments-body">
+            <tr>
+              <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 20px;">
+                Loading assignments...
+              </td>
+            </tr>
+          </tbody>
 
-      </table>
+        </table>
+      </div>
 
     </div>
 
@@ -533,11 +539,43 @@
   `;
   document.head.appendChild(style);
 
-  // Fetch when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', fetchPublicStats);
-  } else {
+  function setupMobileMenu() {
+    const menuToggle = document.getElementById('mobile-menu-toggle');
+    const nav = document.querySelector('.navbar nav');
+    if (menuToggle && nav) {
+      menuToggle.addEventListener('click', () => {
+        nav.classList.toggle('active');
+        const icon = menuToggle.querySelector('i');
+        if (icon) {
+          icon.classList.toggle('fa-bars');
+          icon.classList.toggle('fa-xmark');
+        }
+      });
+
+      // Close menu when a link is clicked
+      nav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          nav.classList.remove('active');
+          const icon = menuToggle.querySelector('i');
+          if (icon) {
+            icon.classList.add('fa-bars');
+            icon.classList.remove('fa-xmark');
+          }
+        });
+      });
+    }
+  }
+
+  // Fetch and setup when DOM is ready
+  function init() {
     fetchPublicStats();
+    setupMobileMenu();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
   }
 </script></body>
 </html>
