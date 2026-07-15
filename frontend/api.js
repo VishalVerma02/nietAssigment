@@ -13,9 +13,11 @@ const emailInput = document.getElementById('email');
 const emailError = document.getElementById('emailError');
 
 if (emailInput && emailError) {
+  // Real-time syntax feedback as the user types
   emailInput.addEventListener('input', () => {
     const emailValue = emailInput.value.trim();
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    emailError.textContent = 'Please enter a valid email address (e.g. name@domain.com).'; // Reset text
     if (emailValue === '') {
       emailError.style.display = 'none';
       emailInput.style.border = 'none';
@@ -28,6 +30,26 @@ if (emailInput && emailError) {
       emailError.style.display = 'none';
       emailInput.style.border = '1px solid #00d9ff';
       emailInput.style.boxShadow = '0 0 10px rgba(0, 217, 255, 0.3)';
+    }
+  });
+
+  // Check email availability when the user leaves the input box
+  emailInput.addEventListener('blur', async () => {
+    const emailValue = emailInput.value.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (emailValue !== '' && emailRegex.test(emailValue)) {
+      try {
+        const response = await fetch(`${API_URL}/auth/check-email?email=${encodeURIComponent(emailValue)}`);
+        const data = await response.json();
+        if (!data.available) {
+          emailError.style.display = 'block';
+          emailError.textContent = 'This email is already registered. Please login or use a different email.';
+          emailInput.style.border = '1px solid #ff4d6d';
+          emailInput.style.boxShadow = '0 0 10px rgba(255, 77, 109, 0.3)';
+        }
+      } catch (err) {
+        console.error('Error checking email availability:', err);
+      }
     }
   });
 }
@@ -48,12 +70,34 @@ if (registerForm) {
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
-      if (emailError) emailError.style.display = 'block';
+      if (emailError) {
+        emailError.style.display = 'block';
+        emailError.textContent = 'Please enter a valid email address (e.g. name@domain.com).';
+      }
       if (emailInput) {
         emailInput.style.border = '1px solid #ff4d6d';
         emailInput.focus();
       }
       return;
+    }
+
+    // Check email availability on submit
+    try {
+      const checkResponse = await fetch(`${API_URL}/auth/check-email?email=${encodeURIComponent(email)}`);
+      const checkData = await checkResponse.json();
+      if (!checkData.available) {
+        if (emailError) {
+          emailError.style.display = 'block';
+          emailError.textContent = 'This email is already registered. Please login or use a different email.';
+        }
+        if (emailInput) {
+          emailInput.style.border = '1px solid #ff4d6d';
+          emailInput.focus();
+        }
+        return;
+      }
+    } catch (err) {
+      console.error('Error verifying email during submission:', err);
     }
 
     if (password !== confirmPassword) {
@@ -76,7 +120,19 @@ if (registerForm) {
         alert('Registration successful! Please login.');
         window.location.href = 'login.html';
       } else {
-        alert(data.message || 'Registration failed');
+        // If domain or email verification fails from server-side MX record check
+        if (data.message && (data.message.includes('domain') || data.message.includes('mail servers') || data.message.includes('registered'))) {
+          if (emailError) {
+            emailError.style.display = 'block';
+            emailError.textContent = data.message;
+          }
+          if (emailInput) {
+            emailInput.style.border = '1px solid #ff4d6d';
+            emailInput.focus();
+          }
+        } else {
+          alert(data.message || 'Registration failed');
+        }
       }
     } catch (error) {
       console.error(error);

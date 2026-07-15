@@ -324,6 +324,31 @@ app.get('/api/public/stats', async (req, res) => {
 // AUTHENTICATION ROUTES
 // ========================
 
+// Check Email Availability Route
+app.get('/api/auth/check-email', async (req, res) => {
+  try {
+    const { email } = req.query;
+    if (!email) {
+      return res.status(400).json({ message: 'Email query parameter required' });
+    }
+
+    const connection = await pool.getConnection();
+    const [existingUser] = await connection.execute(
+      'SELECT email FROM users WHERE email = ?',
+      [email.trim()]
+    );
+    connection.release();
+
+    if (existingUser.length > 0) {
+      return res.status(200).json({ available: false });
+    }
+    return res.status(200).json({ available: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
 // Register Route (Student only)
 app.post('/api/auth/register', async (req, res) => {
   try {
@@ -336,6 +361,21 @@ app.post('/api/auth/register', async (req, res) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ message: 'Invalid email format' });
+    }
+
+    // DNS MX Check to verify domain actually exists and has mail servers
+    const dns = require('dns').promises;
+    const domain = email.split('@')[1];
+    try {
+      const mx = await dns.resolveMx(domain);
+      if (!mx || mx.length === 0) {
+        return res.status(400).json({ message: 'Email domain has no valid mail servers (cannot receive mail)' });
+      }
+    } catch (err) {
+      if (err.code === 'ENOTFOUND' || err.code === 'ENODATA' || err.code === 'ESERVFAIL') {
+        return res.status(400).json({ message: 'Email domain does not exist or is invalid' });
+      }
+      // Other network errors (like ECONNREFUSED locally) are bypassed gracefully
     }
 
     if (password !== confirmPassword) {
