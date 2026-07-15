@@ -559,15 +559,21 @@ footer{
     .hero{
         flex-direction:column;
         gap:50px;
+        padding: 60px 4%;
     }
 
     .hero-left,
     .hero-right{
         width:100%;
+        min-width: 0;
     }
 
     .dashboard-grid{
-        grid-template-columns:1fr;
+        grid-template-columns: minmax(0, 1fr);
+    }
+    
+    .dashboard-grid > div {
+        min-width: 0;
     }
 
     .cta-section{
@@ -625,6 +631,11 @@ footer{
         line-height:52px;
     }
 
+    .features-section,
+    .dashboard-section {
+        padding: 60px 4%;
+    }
+
     .section-title h1,
     .dashboard-title,
     .cta-section h1{
@@ -663,6 +674,12 @@ footer{
 
     .menu-toggle{
         font-size:22px;
+    }
+
+    .hero,
+    .features-section,
+    .dashboard-section {
+        padding: 40px 15px;
     }
 
     .hero-left h1{
