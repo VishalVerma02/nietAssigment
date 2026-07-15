@@ -9,17 +9,50 @@ const API_URL = window.location.hostname === 'localhost' || window.location.host
 // ========================
 
 const registerForm = document.getElementById('registerForm');
+const emailInput = document.getElementById('email');
+const emailError = document.getElementById('emailError');
+
+if (emailInput && emailError) {
+  emailInput.addEventListener('input', () => {
+    const emailValue = emailInput.value.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (emailValue === '') {
+      emailError.style.display = 'none';
+      emailInput.style.border = 'none';
+      emailInput.style.boxShadow = 'none';
+    } else if (!emailRegex.test(emailValue)) {
+      emailError.style.display = 'block';
+      emailInput.style.border = '1px solid #ff4d6d';
+      emailInput.style.boxShadow = '0 0 10px rgba(255, 77, 109, 0.3)';
+    } else {
+      emailError.style.display = 'none';
+      emailInput.style.border = '1px solid #00d9ff';
+      emailInput.style.boxShadow = '0 0 10px rgba(0, 217, 255, 0.3)';
+    }
+  });
+}
+
 if (registerForm) {
   registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const fullName = document.getElementById('fullName').value;
-    const email = document.getElementById('email').value;
+    const fullName = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
 
     if (!fullName || !email || !password || !confirmPassword) {
       alert('All fields are required');
+      return;
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      if (emailError) emailError.style.display = 'block';
+      if (emailInput) {
+        emailInput.style.border = '1px solid #ff4d6d';
+        emailInput.focus();
+      }
       return;
     }
 
