@@ -2570,10 +2570,10 @@
       // 1. Header profile card (avatar + name)
       const profileCard = document.getElementById('profileCardHeader');
       if (profileCard) {
-        profileCard.title = "Click to upload profile picture";
+        profileCard.title = "Click to view settings";
         profileCard.addEventListener('click', () => {
-          const input = document.getElementById('profilePicInput');
-          if (input) input.click();
+          const settingsLink = document.querySelector(`.nav-link[data-target="settings"]`);
+          if (settingsLink) settingsLink.click();
         });
       }
 
