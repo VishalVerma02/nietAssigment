@@ -902,24 +902,97 @@ footer{
 
 .contact-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
     width: 100%;
-    max-width: 1150px;
+    max-width: 1350px;
     align-items: stretch;
 }
 
-/* Left Column: Contact Info Card */
+/* Left & Middle Column: Contact Info Cards */
 .contact-info-card {
     background: rgba(8, 25, 71, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(20px);
-    padding: 40px;
+    padding: 30px 24px;
     border-radius: 24px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 30px rgba(0, 217, 255, 0.08);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+/* Mini FAQ List Styling inside Middle Card */
+.mini-faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.mini-faq-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mini-faq-item:hover {
+    background: rgba(0, 217, 255, 0.06);
+    border-color: rgba(0, 217, 255, 0.25);
+}
+
+.mini-faq-item.active {
+    background: rgba(0, 217, 255, 0.08);
+    border-color: #00d9ff;
+}
+
+.mini-faq-q {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+}
+
+.mini-faq-q span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mini-faq-icon {
+    font-size: 12px;
+    color: #94a3b8;
+    transition: transform 0.3s ease;
+}
+
+.mini-faq-item.active .mini-faq-icon {
+    transform: rotate(180deg);
+    color: #00d9ff;
+}
+
+.mini-faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+    opacity: 0;
+}
+
+.mini-faq-item.active .mini-faq-a {
+    max-height: 120px;
+    opacity: 1;
+    padding-top: 8px;
+}
+
+.mini-faq-a p {
+    color: #cbd5e1;
+    font-size: 12px;
+    line-height: 18px;
+    margin: 0;
 }
 
 .info-card-top h2 {
@@ -1104,10 +1177,10 @@ footer{
     border: 1px solid rgba(255, 77, 109, 0.3);
 }
 
-@media(max-width: 992px) {
+@media(max-width: 1150px) {
     .contact-grid {
         grid-template-columns: 1fr;
-        gap: 30px;
+        gap: 25px;
     }
 }
 
