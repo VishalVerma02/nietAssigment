@@ -722,3 +722,145 @@ footer{
     }
 
 }
+
+/* ========================= */
+/* CONTACT SECTION */
+/* ========================= */
+
+.contact-section {
+    padding: 80px 8%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-header {
+    text-align: center;
+    margin-bottom: 40px;
+    max-width: 600px;
+}
+
+.contact-header h1 {
+    font-size: 42px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+
+.contact-header p {
+    color: #94a3b8;
+    font-size: 15px;
+    line-height: 24px;
+}
+
+.contact-card {
+    width: 100%;
+    max-width: 600px;
+    background: rgba(8, 25, 71, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    padding: 40px;
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 30px rgba(0, 217, 255, 0.1);
+}
+
+.contact-card .form-group {
+    margin-bottom: 22px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.contact-card label {
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.contact-card input,
+.contact-card textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+    resize: vertical;
+}
+
+.contact-card input::placeholder,
+.contact-card textarea::placeholder {
+    color: #64748b;
+}
+
+.contact-card input:focus,
+.contact-card textarea:focus {
+    border-color: #00d9ff;
+    box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-send-message {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #00d9ff 0%, #7c3aed 100%);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 217, 255, 0.25);
+    margin-top: 10px;
+}
+
+.btn-send-message:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
+}
+
+.btn-send-message:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.contact-status {
+    margin-top: 18px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    display: none;
+    text-align: center;
+}
+
+.contact-status.success {
+    background: rgba(56, 255, 120, 0.15);
+    color: #38ff78;
+    border: 1px solid rgba(56, 255, 120, 0.3);
+}
+
+.contact-status.error {
+    background: rgba(255, 77, 109, 0.15);
+    color: #ff4d6d;
+    border: 1px solid rgba(255, 77, 109, 0.3);
+}
+
+@media(max-width: 768px) {
+    .contact-section {
+        padding: 50px 5%;
+    }
+    .contact-card {
+        padding: 25px 20px;
+    }
+    .contact-header h1 {
+        font-size: 32px;
+    }
+}

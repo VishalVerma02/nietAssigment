@@ -6,6 +6,7 @@ const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const app = express();
@@ -320,6 +321,93 @@ app.get('/api/public/stats', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// Submit Contact Form
+app.post('/api/public/contact', async (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+
+    if (!name || !email || !message) {
+      return res.status(400).json({ message: 'All fields (name, email, message) are required' });
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: 'Please provide a valid email address' });
+    }
+
+    // 1. Ensure contact_messages table exists & insert message into database
+    const connection = await pool.getConnection();
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS contact_messages (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        message TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    await connection.execute(
+      'INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)',
+      [name.trim(), email.trim(), message.trim()]
+    );
+    connection.release();
+
+    // 2. Attempt to send Email Notification via Nodemailer if SMTP credentials exist
+    const smtpUser = process.env.EMAIL_USER;
+    const smtpPass = process.env.EMAIL_PASS;
+    const receiverEmail = process.env.EMAIL_RECEIVER || 'vikr8009@gmail.com';
+
+    if (smtpUser && smtpPass) {
+      try {
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: smtpUser,
+            pass: smtpPass
+          }
+        });
+
+        const mailOptions = {
+          from: `"NIET Contact Form" <${smtpUser}>`,
+          to: receiverEmail,
+          replyTo: email,
+          subject: `New Contact Message from ${name}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #020b2d; color: #ffffff; border-radius: 10px;">
+              <h2 style="color: #00d9ff;">New Message Received via NIET Assignment Tracker</h2>
+              <p><strong>Name:</strong> ${name}</p>
+              <p><strong>Email:</strong> <a href="mailto:${email}" style="color: #00d9ff;">${email}</a></p>
+              <p><strong>Message:</strong></p>
+              <div style="background-color: #081947; padding: 15px; border-radius: 8px; color: #e2e8f0;">
+                ${message.replace(/\n/g, '<br>')}
+              </div>
+              <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 20px;">
+              <p style="font-size: 12px; color: #94a3b8;">You can directly hit "Reply" in your email client to reply to ${name} (${email}).</p>
+            </div>
+          `
+        };
+
+        await transporter.sendMail(mailOptions);
+        console.log(`Contact email successfully dispatched to ${receiverEmail}`);
+      } catch (mailErr) {
+        console.error('Failed to send email via SMTP, but message was saved to DB:', mailErr);
+      }
+    } else {
+      console.log('SMTP credentials not configured in .env. Message stored securely in database.');
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Thank you! Your message has been sent successfully. We will get back to you soon.'
+    });
+
+  } catch (error) {
+    console.error('Error submitting contact form:', error);
+    res.status(500).json({ message: 'Server error. Please try again later.' });
   }
 });
 
