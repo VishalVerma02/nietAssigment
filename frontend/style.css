@@ -491,6 +491,19 @@ footer{
     line-height:30px;
 }
 
+.footer-grid p a {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.footer-grid p a:hover {
+    color: #00d9ff;
+    transform: translateX(6px);
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.4);
+}
+
 .socials{
     display:flex;
     gap:15px;
