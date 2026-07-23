@@ -325,29 +325,80 @@
     <p>Have questions about assignments, accounts, or support? Drop us a line below.</p>
   </div>
 
-  <div class="contact-card">
-    <form id="contactForm">
-      <div class="form-group">
-        <label for="contactName">Your Name</label>
-        <input type="text" id="contactName" placeholder="Enter your name" required>
+  <div class="contact-grid">
+    <!-- Left Column: Attractive Info Card -->
+    <div class="contact-info-card">
+      <div class="info-card-top">
+        <h2><i class="fa-solid fa-headset" style="color: #00d9ff; margin-right: 10px;"></i>Let's Connect & Support</h2>
+        <p class="info-desc">We are here to assist students and faculty members at NIET. Reach out directly or send us a message.</p>
       </div>
 
-      <div class="form-group">
-        <label for="contactEmail">Email Address</label>
-        <input type="email" id="contactEmail" placeholder="Enter your email" required>
+      <div class="info-items">
+        <div class="info-item">
+          <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+          <div class="info-content">
+            <h4>Campus Location</h4>
+            <p>NIET Greater Noida, 19, Knowledge Park II, UP 201306</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon"><i class="fa-solid fa-envelope"></i></div>
+          <div class="info-content">
+            <h4>Email Support</h4>
+            <p>vikr8009@gmail.com / support@niet.ac.in</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon"><i class="fa-solid fa-phone"></i></div>
+          <div class="info-content">
+            <h4>Helpline Phone</h4>
+            <p>0120-2341900 / +91 98765 43210</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon"><i class="fa-solid fa-clock"></i></div>
+          <div class="info-content">
+            <h4>Working Hours</h4>
+            <p>Monday - Saturday: 9:00 AM - 5:00 PM</p>
+          </div>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="contactMessage">Message</label>
-        <textarea id="contactMessage" rows="4" placeholder="Enter your message" required></textarea>
+      <div class="contact-features-mini">
+        <div class="mini-feature"><i class="fa-solid fa-bolt"></i> Fast Response</div>
+        <div class="mini-feature"><i class="fa-solid fa-shield-halved"></i> 24/7 Uptime</div>
+        <div class="mini-feature"><i class="fa-solid fa-graduation-cap"></i> Student Assistance</div>
       </div>
+    </div>
 
-      <button type="submit" class="btn-send-message" id="btnSendMessage">
-        Send Message
-      </button>
+    <!-- Right Column: Contact Form -->
+    <div class="contact-card">
+      <form id="contactForm">
+        <div class="form-group">
+          <label for="contactName">Your Name</label>
+          <input type="text" id="contactName" placeholder="Enter your name" required>
+        </div>
 
-      <div id="contactStatus" class="contact-status"></div>
-    </form>
+        <div class="form-group">
+          <label for="contactEmail">Email Address</label>
+          <input type="email" id="contactEmail" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="contactMessage">Message</label>
+          <textarea id="contactMessage" rows="4" placeholder="Enter your message" required></textarea>
+        </div>
+
+        <button type="submit" class="btn-send-message" id="btnSendMessage">
+          Send Message
+        </button>
+
+        <div id="contactStatus" class="contact-status"></div>
+      </form>
+    </div>
   </div>
 </section>
 
