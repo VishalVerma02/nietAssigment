@@ -36,6 +36,7 @@
     <a href="#about">About</a>
     <a href="#features">Features</a>
     <a href="#tracker">Tracker</a>
+    <a href="#faq">FAQ</a>
     <a href="#contact">Contact</a>
     
 
@@ -316,6 +317,67 @@
       Get Started Now
     </button>
 
+</section>
+
+<!-- ================= FAQ SECTION ================= -->
+<section class="faq-section" id="faq">
+  <div class="section-title">
+    <span class="section-badge"><i class="fa-solid fa-circle-question"></i> Got Questions?</span>
+    <h1 style="font-size: 38px; font-weight: 700; color: white; margin-bottom: 12px;">Frequently Asked Questions</h1>
+    <p style="color: #94a3b8; font-size: 15px; max-width: 600px; margin: 0 auto 40px auto;">Everything you need to know about NIET Assignment Tracker and how it works.</p>
+  </div>
+
+  <div class="faq-container">
+    <div class="faq-item active">
+      <div class="faq-question">
+        <span><i class="fa-solid fa-laptop-code"></i> How do students submit their assignments?</span>
+        <i class="fa-solid fa-chevron-down faq-icon"></i>
+      </div>
+      <div class="faq-answer">
+        <p>Students can log into their dashboard, browse active course assignments, and upload files directly (PDF, Docs, Images) or submit external links with instant confirmation.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span><i class="fa-solid fa-bell"></i> Will I get notified about upcoming deadline alerts?</span>
+        <i class="fa-solid fa-chevron-down faq-icon"></i>
+      </div>
+      <div class="faq-answer">
+        <p>Yes! The portal features real-time notifications for new assignments, urgent deadlines, and teacher grading feedback right in your student dashboard notification center.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span><i class="fa-solid fa-clock-rotate-left"></i> What happens if an assignment is submitted late?</span>
+        <i class="fa-solid fa-chevron-down faq-icon"></i>
+      </div>
+      <div class="faq-answer">
+        <p>Assignments submitted past the due date are automatically flagged with an "Overdue" status tag for faculty review, ensuring transparent tracking for both students and admins.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span><i class="fa-solid fa-user-shield"></i> How secure is student submission data?</span>
+        <i class="fa-solid fa-chevron-down faq-icon"></i>
+      </div>
+      <div class="faq-answer">
+        <p>All submissions are encrypted and stored securely on cloud database clusters with strict role-based access control. Only authorized NIET faculty can view and evaluate your work.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span><i class="fa-solid fa-id-card-clip"></i> How do teachers grade and give feedback?</span>
+        <i class="fa-solid fa-chevron-down faq-icon"></i>
+      </div>
+      <div class="faq-answer">
+        <p>Faculty members log into the Admin Dashboard, inspect student file attachments or links, assign numerical grades or letter marks, and write detailed feedback for each student.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ================= CONTACT SECTION ================= -->
@@ -704,11 +766,25 @@
     }
   }
 
+  function setupFaqAccordion() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const isActive = item.classList.contains('active');
+        faqItems.forEach(i => i.classList.remove('active'));
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      });
+    });
+  }
+
   // Fetch and setup when DOM is ready
   function init() {
     fetchPublicStats();
     setupMobileMenu();
     setupContactForm();
+    setupFaqAccordion();
   }
 
   if (document.readyState === 'loading') {
