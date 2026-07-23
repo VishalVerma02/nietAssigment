@@ -1246,6 +1246,33 @@ app.get('/api/admin/students', verifyToken, async (req, res) => {
   }
 });
 
+// Get Contact Form Messages (Admin only)
+app.get('/api/admin/contact-messages', verifyToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+    const connection = await pool.getConnection();
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS contact_messages (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        message TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    const [messages] = await connection.execute(
+      `SELECT id, name, email, message, created_at FROM contact_messages ORDER BY created_at DESC`
+    );
+    connection.release();
+    res.status(200).json(messages);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
 // Reset Student Password
 app.put('/api/admin/students/:id/reset-password', verifyToken, async (req, res) => {
   try {
