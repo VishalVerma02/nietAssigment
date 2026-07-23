@@ -300,18 +300,21 @@ app.get('/api/public/stats', async (req, res) => {
   try {
     const connection = await pool.getConnection();
     const [assignments] = await connection.execute("SELECT COUNT(id) as total FROM assignments WHERE status = 'active'");
-    const [submissions] = await connection.execute("SELECT COUNT(id) as total FROM student_assignments WHERE status = 'submitted' OR status = 'completed'");
-    const [pending] = await connection.execute("SELECT COUNT(id) as total FROM student_assignments WHERE status = 'pending'");
+    const [submittedUnique] = await connection.execute("SELECT COUNT(DISTINCT assignmentId) as total FROM student_assignments WHERE (status = 'submitted' OR status = 'completed')");
     
     // Fetch 3 recent active assignments
     const [recent] = await connection.execute("SELECT title, subject, dueDate FROM assignments WHERE status = 'active' ORDER BY dueDate ASC LIMIT 3");
     
     connection.release();
 
+    const totalAssignments = assignments[0].total || 0;
+    const totalSubmissions = submittedUnique[0].total || 0;
+    const totalPending = Math.max(0, totalAssignments - totalSubmissions);
+
     res.status(200).json({
-      totalAssignments: assignments[0].total || 0,
-      totalSubmissions: submissions[0].total || 0,
-      totalPending: pending[0].total || 0,
+      totalAssignments: totalAssignments,
+      totalSubmissions: totalSubmissions,
+      totalPending: totalPending,
       recentAssignments: recent
     });
   } catch (error) {
