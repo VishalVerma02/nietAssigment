@@ -25,14 +25,15 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 // MySQL Connection Pool
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 3306,
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'niet_assignment_tracker',
+  host: process.env.DB_HOST || 'mysql-1d2f0969-vishalkumar2122001-b813.l.aivencloud.com',
+  port: process.env.DB_PORT || 13235,
+  user: process.env.DB_USER || 'avnadmin',
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME || 'defaultdb',
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  ssl: { rejectUnauthorized: false }
 });
 
 // Serve uploaded files statically with a database fallback for ephemeral storage (Render compatibility)
@@ -1445,6 +1446,10 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
