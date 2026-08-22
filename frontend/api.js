@@ -114,6 +114,17 @@ if (registerForm) {
         body: JSON.stringify({ fullName, email, password, confirmPassword })
       });
 
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        if (response.status === 503 || text.includes('Service Suspended') || text.includes('suspended')) {
+          alert('⚠️ Render backend service is currently suspended or sleeping. Please click "Resume" in your Render Dashboard.');
+          return;
+        }
+        alert(`Server error (HTTP ${response.status}). Please check your Render backend server.`);
+        return;
+      }
+
       const data = await response.json();
 
       if (response.ok) {
