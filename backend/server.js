@@ -19,6 +19,15 @@ if (!fs.existsSync(uploadsDir)) {
 
 // Middleware
 app.use(cors());
+
+// Normalize URL path so both /api/path and /path match Express routes on Vercel
+app.use((req, res, next) => {
+  if (!req.url.startsWith('/api')) {
+    req.url = '/api' + (req.url.startsWith('/') ? req.url : '/' + req.url);
+  }
+  next();
+});
+
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 // Uploads serving will be handled after connection pool initialization
