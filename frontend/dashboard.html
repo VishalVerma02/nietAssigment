@@ -1487,37 +1487,8 @@
       opacity: 1;
     }
 
-    /* Ultra-responsive & High Polish Mobile Styles */
+    /* Ultra-responsive & High Polish Mobile/Tablet Styles */
     @media (max-width: 1024px) {
-      .sidebar {
-        width: 80px;
-        padding: 20px 10px;
-      }
-      .logo-text, .sidebar-menu li a span, .logout-btn span, .logo-container p {
-        display: none;
-      }
-      .sidebar-menu li a {
-        justify-content: center;
-        padding: 14px;
-      }
-      .logo-container {
-        justify-content: center;
-        margin-bottom: 20px;
-      }
-      .main-content {
-        margin-left: 80px;
-        width: calc(100% - 80px);
-        padding: 24px;
-      }
-    }
-
-    @media (max-width: 900px) {
-      .dashboard-split { grid-template-columns: 1fr; }
-      .settings-grid { grid-template-columns: 1fr; }
-      .progress-stats-grid { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 768px) {
       .sidebar {
         position: fixed !important;
         top: 0 !important;
@@ -1576,6 +1547,113 @@
       }
       .topbar-left {
         flex: 1;
+        min-width: 0;
+      }
+      .topbar-left h1 {
+        font-size: clamp(16px, 4.5vw, 20px);
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .topbar-left p {
+        display: none;
+      }
+      .topbar-right {
+        gap: 10px;
+        flex-shrink: 0;
+      }
+      .notification-bell {
+        width: 38px;
+        height: 38px;
+        font-size: 15px;
+        border-radius: 10px;
+      }
+      .notification-dropdown {
+        top: 70px;
+        right: 15px;
+        left: 15px;
+        width: auto;
+      }
+      .profile-card {
+        padding: 4px 10px 4px 4px;
+        border-radius: 12px;
+        gap: 8px;
+      }
+      .profile-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        border-radius: 8px;
+      }
+      .profile-details .profile-role {
+        display: none;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .stat-card {
+        padding: 16px 14px;
+        gap: 12px;
+        border-radius: 16px;
+        min-height: auto;
+        height: auto;
+      }
+      .stat-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
+        border-radius: 12px;
+        flex-shrink: 0;
+      }
+      .stat-number {
+        font-size: 22px;
+        line-height: 1.2;
+      }
+      .stat-label {
+        font-size: 11px;
+        line-height: 1.3;
+        white-space: normal;
+        word-break: break-word;
+      }
+      .welcome-banner {
+        padding: 18px 16px;
+        border-radius: 16px;
+        margin-bottom: 20px;
+      }
+      .welcome-text h2 {
+        font-size: 18px;
+      }
+      .welcome-text p {
+        font-size: 12px;
+      }
+      .assignments-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .toast-container {
+        bottom: 15px;
+        left: 15px;
+        right: 15px;
+      }
+      .toast {
+        min-width: auto;
+        width: 100%;
+      }
+      .modal-card {
+        width: 94%;
+        margin: 15px;
+        padding: 18px 16px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-split { grid-template-columns: 1fr; }
+      .settings-grid { grid-template-columns: 1fr; }
+      .progress-stats-grid { grid-template-columns: 1fr; }
+    }
         min-width: 0;
       }
       .topbar-left h1 {
@@ -2371,10 +2449,10 @@
         mobileMenuBtn.addEventListener('click', toggleSidebar);
         sidebarOverlay.addEventListener('click', toggleSidebar);
         
-        // Close sidebar on mobile when a link is clicked
+        // Close sidebar on mobile/tablet when a link is clicked
         navLinks.forEach(link => {
           link.addEventListener('click', () => {
-            if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+            if (window.innerWidth <= 1024 && sidebar.classList.contains('open')) {
               toggleSidebar();
             }
           });
