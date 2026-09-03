@@ -2370,18 +2370,6 @@
         
         mobileMenuBtn.addEventListener('click', toggleSidebar);
         sidebarOverlay.addEventListener('click', toggleSidebar);
-
-        // Logo click handler (switches to dashboard overview and closes sidebar on mobile)
-        const sidebarLogoBtn = document.getElementById('sidebarLogoBtn');
-        if (sidebarLogoBtn) {
-          sidebarLogoBtn.addEventListener('click', () => {
-            const dashboardLink = document.querySelector('.nav-link[data-target="dashboard"]');
-            if (dashboardLink) dashboardLink.click();
-            if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
-              toggleSidebar();
-            }
-          });
-        }
         
         // Close sidebar on mobile when a link is clicked
         navLinks.forEach(link => {
@@ -2392,6 +2380,36 @@
           });
         });
       }
+
+      // Universal Logo click handler (switches to dashboard overview and closes mobile menu bar)
+      document.querySelectorAll('.logo-container').forEach(logo => {
+        logo.style.cursor = 'pointer';
+        logo.removeAttribute('onclick');
+        logo.addEventListener('click', (e) => {
+          e.preventDefault();
+          const dashboardLink = document.querySelector('.nav-link[data-target="dashboard"]');
+          if (dashboardLink) dashboardLink.click();
+          
+          const sb = document.querySelector('.sidebar');
+          const overlay = document.getElementById('sidebarOverlay');
+          const mobBtn = document.getElementById('mobileMenuBtn');
+
+          if (sb && sb.classList.contains('open')) {
+            sb.classList.remove('open');
+            if (overlay) {
+              overlay.classList.remove('show');
+              setTimeout(() => overlay.style.display = 'none', 300);
+            }
+            document.body.classList.remove('menu-open');
+            if (mobBtn) {
+              mobBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+              mobBtn.style.background = 'rgba(255,255,255,0.05)';
+              mobBtn.style.color = 'white';
+              mobBtn.style.borderColor = 'var(--border-color)';
+            }
+          }
+        });
+      });
     }
 
     // Notification Dropdown Action
