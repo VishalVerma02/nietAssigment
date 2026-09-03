@@ -1718,7 +1718,7 @@
   <!-- Sidebar Navigation -->
   <aside class="sidebar">
     <div>
-      <div class="logo-container" onclick="window.location.href='index.html'" style="cursor: pointer;">
+      <div class="logo-container" id="sidebarLogoBtn" style="cursor: pointer;">
         <div class="logo-icon">
           <i class="fa-solid fa-graduation-cap"></i>
         </div>
@@ -2370,6 +2370,18 @@
         
         mobileMenuBtn.addEventListener('click', toggleSidebar);
         sidebarOverlay.addEventListener('click', toggleSidebar);
+
+        // Logo click handler (switches to dashboard overview and closes sidebar on mobile)
+        const sidebarLogoBtn = document.getElementById('sidebarLogoBtn');
+        if (sidebarLogoBtn) {
+          sidebarLogoBtn.addEventListener('click', () => {
+            const dashboardLink = document.querySelector('.nav-link[data-target="dashboard"]');
+            if (dashboardLink) dashboardLink.click();
+            if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+              toggleSidebar();
+            }
+          });
+        }
         
         // Close sidebar on mobile when a link is clicked
         navLinks.forEach(link => {
